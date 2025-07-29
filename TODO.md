@@ -1,7 +1,7 @@
 # TODO
 
 [*] - تعریف و پیکربندی سرویس PostgreSQL به عنوان دیتابیس  
-[ * ] - ساخت Docker image برای پروژه Django Gateway  
+[*] - ساخت Docker image برای پروژه Django Gateway  
 [*] - تنظیم و راه‌اندازی Nginx به عنوان reverse proxy  
 [*] - اضافه کردن سرویس‌های auth و user به صورت میکروسرویس (تستی، هنوز اضافه نشده)  
 [*] - پیکربندی محیط production با فایل‌های .env  
