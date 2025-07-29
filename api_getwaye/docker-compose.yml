@@ -1,23 +1,40 @@
-version: "3"
+version: '3.8'
 
 services:
-  grpc_server:
+  gateway:
     build: .
-    container_name: grpc_server
+    container_name: gateway
     ports:
-      - "50051:50051"
-    volumes:
-      - .:/app
-    command: [ "sh", "./scripts/start.sh" ]
+      - "8000:8000"
+    depends_on:
+      - auth-service
+      - user-service
+    networks:
+      - backend
 
-  envoy:
-    image: envoyproxy/envoy:v1.24-latest
-    container_name: envoy
+  auth-service:
+    image: your-dockerhub-user/auth-service:latest
+    container_name: auth-service
+    networks:
+      - backend
+
+  user-service:
+    image: your-dockerhub-user/user-service:latest
+    container_name: user-service
+    networks:
+      - backend
+
+  nginx:
+    image: nginx:latest
+    container_name: nginx
     ports:
-      - "8080:8080"
+      - "80:80"
     volumes:
-      - ./config/envoy.yaml:/etc/envoy/envoy.yaml
-      - ./proto/hello.pb:/etc/envoy/hello.pb
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - gateway
+    networks:
+      - backend
 
 networks:
   backend:

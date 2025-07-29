@@ -1,9 +1,16 @@
-FROM envoyproxy/envoy:v1.28-latest
+FROM python:3.12-slim
 
-COPY config/envoy.yaml /etc/envoy/envoy.yaml
-COPY proto/hello.pb /etc/envoy/hello.pb
-COPY scripts/start.sh /start.sh
+ENV PYTHONDONTWRITEBYTECODE 1
+ENV PYTHONUNBUFFERED 1
 
-RUN chmod +x /start.sh
+WORKDIR /app
 
-CMD ["/start.sh"]
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+COPY . .
+
+COPY docker/entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+
+ENTRYPOINT ["/entrypoint.sh"]
